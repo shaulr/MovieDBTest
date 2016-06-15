@@ -2,6 +2,7 @@ package tikal.com.myapplication.data;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import tikal.com.myapplication.MovieDetailActivity;
+import tikal.com.myapplication.MovieListActivity;
 import tikal.com.myapplication.R;
 
 /**
@@ -56,15 +58,32 @@ public class MoviesCursorAdapter extends RecyclerView.Adapter<MoviesCursorAdapte
                 mCursor.moveToPosition(position);
                 String movieID = mCursor.getString(mCursor.getColumnIndex(MoviesContract.MOVIE_ID));
                 if(movieID != null &&movieID.length() > 0) {
-                    Intent intent = new Intent(mContext, MovieDetailActivity.class);
-                    intent.putExtra(MoviesContract.MOVIE_ID, movieID);
-                    mContext.startActivity(intent);
+                    if(isTablet(mContext) && !isPortrait()) {
+                        showDetailsTablet(movieID);
+                    } else {
+                        Intent intent = new Intent(mContext, MovieDetailActivity.class);
+                        intent.putExtra(MoviesContract.MOVIE_ID, movieID);
+                        mContext.startActivity(intent);
+                    }
                 }
             }
         });
         return vh;
     }
 
+    private void showDetailsTablet(String movieID) {
+        if(mContext instanceof MovieListActivity) {
+            ((MovieListActivity)mContext).navigateTablet(movieID);
+        }
+    }
+    public boolean isPortrait() {
+        return mContext.getResources().getDisplayMetrics().widthPixels <= mContext.getResources().getDisplayMetrics().heightPixels;
+    }
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
     @Override
     public void onBindViewHolder(VH holder, int position) {
         mCursor.moveToPosition(position);

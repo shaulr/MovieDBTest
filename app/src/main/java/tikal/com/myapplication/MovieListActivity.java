@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.GridLayoutManager;
 
+import tikal.com.myapplication.data.MoviesContract;
 import tikal.com.myapplication.data.MoviesCursorAdapter;
 
 
@@ -43,4 +44,13 @@ public class MovieListActivity extends AppCompatActivity {
 
     }
 
+    public void navigateTablet(String movieID) {
+        MovieDetailFragment fragment = new MovieDetailFragment();
+        Bundle args = new Bundle();
+        args.putString(MoviesContract.MOVIE_ID, movieID);
+        fragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.movie_detail_container, fragment)
+                .commit();
+    }
 }

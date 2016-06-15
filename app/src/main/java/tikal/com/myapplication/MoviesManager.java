@@ -269,12 +269,12 @@ public class MoviesManager implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (mAdapter == null) {
+       // if (mAdapter == null) {
             mAdapter = new MoviesCursorAdapter(mContext, data);
             mRecyclerView.setAdapter(mAdapter);
-        } else {
-            mAdapter.changeCursor(data);
-        }
+//        } else {
+//            mAdapter.changeCursor(data);
+//        }
         if (data.getCount() == 0) {
             sync();
         } else {

@@ -76,22 +76,22 @@ public class MoviesManager implements LoaderManager.LoaderCallbacks<Cursor> {
                     JSONObject jsonObject = new JSONObject(response.string());
                     JSONArray results = jsonObject.getJSONArray("results");
                     ContentValues[] bulkToInsert;
-                    List<ContentValues> mValueList = new ArrayList<ContentValues>();
+                    List<ContentValues> valueList = new ArrayList<ContentValues>();
 
                     for (int i = 0; i < results.length(); i++) {
                         JSONObject result = (JSONObject) results.get(i);
-                        ContentValues mNewValues = new ContentValues();
-                        mNewValues.put(MoviesContract.TITLE_COLUMN, result.getString("title"));
-                        mNewValues.put(MoviesContract.IMAGE_THUMBURL_COLUMN, result.getString("poster_path"));
-                        mNewValues.put(MoviesContract.DESCRIPTION_COLUMN, result.getString("overview"));
-                        mNewValues.put(MoviesContract.SCORE_COLUMN, result.getString("vote_average"));
-                        mNewValues.put(MoviesContract.MOVIE_ID, result.getString("id"));
+                        ContentValues newValues = new ContentValues();
+                        newValues.put(MoviesContract.TITLE_COLUMN, result.getString("title"));
+                        newValues.put(MoviesContract.IMAGE_THUMBURL_COLUMN, result.getString("poster_path"));
+                        newValues.put(MoviesContract.DESCRIPTION_COLUMN, result.getString("overview"));
+                        newValues.put(MoviesContract.SCORE_COLUMN, result.getString("vote_average"));
+                        newValues.put(MoviesContract.MOVIE_ID, result.getString("id"));
 
-                        mValueList.add(mNewValues);
+                        valueList.add(newValues);
                     }
 
-                    bulkToInsert = new ContentValues[mValueList.size()];
-                    mValueList.toArray(bulkToInsert);
+                    bulkToInsert = new ContentValues[valueList.size()];
+                    valueList.toArray(bulkToInsert);
                     mContext.getContentResolver().bulkInsert(MoviesContract.MOVIE_TABLE_CONTENTURI, bulkToInsert);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
 
